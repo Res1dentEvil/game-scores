@@ -1,1 +1,1 @@
-# game-board
+# game-scores
