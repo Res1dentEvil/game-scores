@@ -1,0 +1,9 @@
+{
+    "serverPort" : 5000,
+    "dbUrl": "mongodb+srv://ivan:qwerty123@cluster0.tdv7u.mongodb.net/game-board?retryWrites=true&w=majority",
+    "secretKey": "bla-bla-bla",
+    "cookieKey": "bla-bla-bla",
+    "clientID": "107840811352-p9utehcv8k4vg740euputu8je9rqeag4.apps.googleusercontent.com",
+    "clientSecret": "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",
+    "callbackURL": "http://localhost:5000/auth/google/callback"
+}

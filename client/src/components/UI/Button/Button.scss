@@ -1,0 +1,19 @@
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  min-width: 200px;
+  height: 45px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  background: white;
+  font-size: 16px;
+  box-shadow: rgba(0, 0, 0, 0.10) 0px 5px 15px;
+  padding: 0 15px;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+  }
+}

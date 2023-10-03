@@ -1,0 +1,21 @@
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  .profile-page__img {
+    width: 12%;
+    height: 12%;
+    border-radius: 50%;
+  }
+  .profile-page__h2 {
+    font-weight: normal;
+    margin: 10px 0 35px;
+  }
+  .profile-page__btn-group {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin: 20px 0;
+  }
+}
