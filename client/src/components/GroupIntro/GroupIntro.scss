@@ -1,0 +1,56 @@
+.group-intro {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  width: 600px;
+  min-height: 150px;
+  border-radius: 13px;
+  box-shadow: rgb(0, 0, 0) 0px 5px 15px;
+  background: #282C35;
+  padding: 25px;
+  background: url("../../assets/img/bg1.webp");
+  //background: url("../../assets/img/bg1.jpg");
+
+
+  &:hover {
+    cursor: pointer;
+    box-shadow: #1A2B25 0px 5px 15px;
+  }
+
+  .group-intro__items {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+
+  }
+
+  .group-intro__title {
+    font-size: 27px;
+    color: white;
+  }
+
+  .item__game-mode {
+    position: absolute;
+    left: 30px;
+    top: 41px;
+    border-radius: 50%;
+
+    img {
+      border-radius: 50%;
+      animation: 1s linear 0s infinite alternate animating-shadow;
+      width: 85px;
+      height: 85px;
+    }
+
+    @keyframes animating-shadow {
+      from {
+        box-shadow: rgba(201, 164, 79, 0.8) 0px 0px 17px;
+      }
+      to {
+        box-shadow: rgba(201, 164, 79, 0) 0px 0px 17px;
+      }
+    }
+  }
+}

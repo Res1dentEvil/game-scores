@@ -90,7 +90,8 @@ export const createGroup =
         })
         .then((response) => {
           console.log(response.data);
-          dispatch(storeSlice.actions.setCurrentUser(response.data));
+          dispatch(getCurrentUser(response.data.email));
+          // dispatch(storeSlice.actions.setCurrentUser(response.data));
           dispatch(storeSlice.actions.fetchingEnd());
 
           if (response.status === 200) {

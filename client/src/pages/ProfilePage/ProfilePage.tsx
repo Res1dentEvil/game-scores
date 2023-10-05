@@ -6,6 +6,7 @@ import { Button } from '../../components/UI/Button/Button';
 import Preloader from '../../components/UI/Preloader/Preloader';
 import { getCurrentUser, getProfileGroups } from '../../store/reducers/ActionCreators';
 import { IGroup } from '../../types';
+import { GroupIntro } from '../../components/GroupIntro/GroupIntro';
 
 const ProfilePage = () => {
   const [profileGroups, setProfileGroups] = useState<IGroup[]>([]);
@@ -27,7 +28,7 @@ const ProfilePage = () => {
       {isLoading ? (
         <Preloader />
       ) : (
-        <>
+        <div className="profile-page__container">
           <img className="profile-page__img" src={userGoogleProfile.picture} alt="profile-img" />
           <h2 className="profile-page__h2">{userGoogleProfile.name}</h2>
           <div>
@@ -35,8 +36,12 @@ const ProfilePage = () => {
               <></>
             ) : (
               <>
-                {profileGroups.length ? (
-                  <div>groups list</div>
+                {profileGroups.length > 0 ? (
+                  <div className="profile-page__group-list">
+                    {profileGroups.map((group) => {
+                      return <GroupIntro key={group.groupName!} group={group} />;
+                    })}
+                  </div>
                 ) : (
                   <div>
                     <p>Ви не стежите за жодною групою</p>
@@ -49,7 +54,7 @@ const ProfilePage = () => {
               </>
             )}
           </div>
-        </>
+        </div>
       )}
     </div>
   );
