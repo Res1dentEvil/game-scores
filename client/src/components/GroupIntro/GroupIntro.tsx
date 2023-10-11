@@ -1,25 +1,37 @@
 import React from 'react';
 import './GroupIntro.scss';
 import { IGroup } from '../../types';
-import IconGames from '../../assets/img/games.svg';
-import IconMPlayers from '../../assets/img/players.svg';
-import IconModeDuel from '../../assets/img/duel.png';
-import IconModePvP from '../../assets/img/mpvp.png';
+import IconGames from '../../assets/img/games2.svg';
+import IconMPlayers from '../../assets/img/players4.svg';
+import IconTime from '../../assets/img/time.svg';
+import IconBorder from '../../assets/img/border.svg';
+import { useNavigate } from 'react-router-dom';
 
 interface GroupIntroProps {
   group: IGroup;
 }
 
 export const GroupIntro = ({ group }: GroupIntroProps) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="group-intro">
+    <div
+      className="group-intro"
+      onClick={() => {
+        navigate(`/group/${group._id}`);
+      }}
+    >
       <div className="group-intro__title">{group.groupName}</div>
       <div className="group-intro__items">
         <div className="group-intro__item item__game-mode">
           {group.groupMode === 'Duel' ? (
-            <img className="duel" src={IconModeDuel} alt="" title="Duel mode" />
+            <div className="duel">
+              <img src={IconBorder} alt="" title="Duel mode" />
+            </div>
           ) : (
-            <img className="" src={IconModePvP} alt="" title="mPvP mode" />
+            <div className="mPvP">
+              <img src={IconBorder} alt="" title="mPvP mode" />
+            </div>
           )}
         </div>
         <div className="group-intro__item item__games" title="Зіграно ігор">
@@ -29,6 +41,10 @@ export const GroupIntro = ({ group }: GroupIntroProps) => {
         <div className="group-intro__item item__players" title="Кількість гравців">
           <span>{group.members.length}</span>
           <img className="" src={IconMPlayers} alt="" width="70" height="70" />
+        </div>
+        <div className="group-intro__item item__time" title="Зіграно часу">
+          <span>{group.members.length}</span>
+          <img className="" src={IconTime} alt="" width="70" height="70" />
         </div>
       </div>
     </div>

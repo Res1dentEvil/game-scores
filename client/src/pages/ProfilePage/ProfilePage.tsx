@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import './ProfilePage.scss';
-import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '../../components/UI/Button/Button';
 import Preloader from '../../components/UI/Preloader/Preloader';
-import { getCurrentUser, getProfileGroups } from '../../store/reducers/ActionCreators';
+import { getProfileGroups } from '../../store/reducers/ActionCreators';
 import { IGroup } from '../../types';
 import { GroupIntro } from '../../components/GroupIntro/GroupIntro';
+import BorderCircle from '../../assets/img/circle.png';
 
 const ProfilePage = () => {
   const [profileGroups, setProfileGroups] = useState<IGroup[]>([]);
@@ -22,14 +22,17 @@ const ProfilePage = () => {
       dispatch(getProfileGroups(currentUser.groups, setProfileGroups, setLoadingProfile));
     }
   }, [currentUser]);
-
   return (
     <div className="container profile-page ">
       {isLoading ? (
         <Preloader />
       ) : (
         <div className="profile-page__container">
-          <img className="profile-page__img" src={userGoogleProfile.picture} alt="profile-img" />
+          <div className="profile-page__img-border">
+            <img className="profile-page__img" src={userGoogleProfile.picture} alt="profile-img" />
+          </div>
+
+          {/*<img className="profile-page__img" src={userGoogleProfile.picture} alt="profile-img" />*/}
           <h2 className="profile-page__h2">{userGoogleProfile.name}</h2>
           <div>
             {loadingProfile ? (
@@ -39,7 +42,9 @@ const ProfilePage = () => {
                 {profileGroups.length > 0 ? (
                   <div className="profile-page__group-list">
                     {profileGroups.map((group) => {
-                      return <GroupIntro key={group.groupName!} group={group} />;
+                      if (group) {
+                        return <GroupIntro key={group._id} group={group} />;
+                      }
                     })}
                   </div>
                 ) : (

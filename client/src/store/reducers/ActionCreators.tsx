@@ -1,10 +1,9 @@
 import axios, { AxiosError } from 'axios';
-import { IAuthBody, IGroup, IUserGoogleAuthData, IUserGoogleProfile } from '../../types';
+import { IAuthBody, IGroup, IUser, IUserGoogleAuthData, IUserGoogleProfile } from '../../types';
 import { AppDispatch } from '../store';
 import { storeSlice } from './StoreSlice';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { googleLogout } from '@react-oauth/google';
-import { useNavigate } from 'react-router-dom';
 
 export const baseURL = `http://localhost:5000`;
 // const baseURL = `https://app-invoices-server-res1dentevil.onrender.com`;
@@ -28,11 +27,11 @@ export const getGoogleProfile =
               },
             }
           )
-          .then((res) => {
-            dispatch(storeSlice.actions.setUserGoogleProfile(res.data));
+          .then(async (res) => {
+            await dispatch(storeSlice.actions.setUserGoogleProfile(res.data));
             // console.log(res.data);
-            dispatch(checkRegistration(res.data));
-            dispatch(getCurrentUser(res.data.email));
+            await dispatch(checkRegistration(res.data));
+            await dispatch(getCurrentUser(res.data.email));
 
             dispatch(storeSlice.actions.fetchingEnd());
           });
@@ -89,9 +88,8 @@ export const createGroup =
           headers: { 'Content-Type': 'application/json' },
         })
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           dispatch(getCurrentUser(response.data.email));
-          // dispatch(storeSlice.actions.setCurrentUser(response.data));
           dispatch(storeSlice.actions.fetchingEnd());
 
           if (response.status === 200) {
@@ -159,3 +157,38 @@ export const getProfileGroups =
       setLoadingProfile(false);
     }
   };
+
+export const getGroup =
+  (id: string, setGroupState: Dispatch<SetStateAction<IGroup>>) =>
+  async (dispatch: AppDispatch) => {
+    try {
+      const response = await axios
+        .get(`${baseURL}/api/group/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((response) => {
+          // console.log(response.data);
+          setGroupState(response.data);
+          dispatch(storeSlice.actions.fetchingEnd());
+        });
+    } catch (e) {
+      const error = e as AxiosError;
+      dispatch(storeSlice.actions.fetchingEnd());
+    }
+  };
+
+export const deleteGroup = (id: string, user: IUser) => async (dispatch: AppDispatch) => {
+  try {
+    const response = await axios
+      .delete(`${baseURL}/api/group/delete/${id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      })
+      .then(() => {
+        dispatch(getCurrentUser(user.email));
+      });
+  } catch (e) {
+    const error = e as AxiosError;
+  }
+};

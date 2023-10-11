@@ -34,22 +34,31 @@
   .item__game-mode {
     position: absolute;
     left: 30px;
-    top: 41px;
-    border-radius: 50%;
+    top: 61px;
+    width: 73px;
+    height: 73px;
 
-    img {
-      border-radius: 50%;
-      animation: 1s linear 0s infinite alternate animating-shadow;
-      width: 85px;
-      height: 85px;
+    .duel {
+      background-image: url("../../assets/img/duel1.svg");
+
     }
 
-    @keyframes animating-shadow {
+    .mPvP {
+      background-image: url("../../assets/img/mPvP.svg");
+    }
+
+    img {
+      animation: 550s linear 0s infinite alternate animating-rotate;
+      width: 73px;
+      height: 73px;
+    }
+
+    @keyframes animating-rotate {
       from {
-        box-shadow: rgba(201, 164, 79, 0.8) 0px 0px 17px;
+        transform: rotate(180rad);
       }
       to {
-        box-shadow: rgba(201, 164, 79, 0) 0px 0px 17px;
+        transform: rotate(0rad);
       }
     }
   }

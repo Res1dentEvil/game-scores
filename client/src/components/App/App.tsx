@@ -13,6 +13,7 @@ import ProfilePage from '../../pages/ProfilePage/ProfilePage';
 import LoginPage from '../../pages/LoginPage/LoginPage';
 import { CreateGroupPage } from '../../pages/CreateGroupPage/CreateGroupPage';
 import { AllGroupsPage } from '../../pages/AllGroupsPage/AllGroupsPage';
+import { GroupPage } from '../../pages/GroupPage/GroupPage';
 
 export const App = () => {
   const { userGoogleAuthData, userGoogleProfile, isLoading, isAuth } = useAppSelector(
@@ -43,6 +44,7 @@ export const App = () => {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/create-group" element={<CreateGroupPage />} />
             <Route path="/groups" element={<AllGroupsPage />} />
+            <Route path="/group/:id" element={<GroupPage />} />
             {/*<Route path="/user/:id" element={<TasksListByRole />} />*/}
             {/*<Route path="/member/:id" element={<TasksListByRole />} />*/}
             <Route path="*" element={<Navigate to="/profile" replace />} />

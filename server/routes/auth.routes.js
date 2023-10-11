@@ -14,7 +14,7 @@ router.post(
   async (req, res) => {
     try {
       const { id, name, email, picture } = req.body;
-      const candidate = await User.findOne({ id });
+      const candidate = await User.findOne({ email });
       if (!candidate) {
         const userRole = await Role.findOne({ value: "USER" });
         const user = new User({

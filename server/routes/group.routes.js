@@ -71,7 +71,6 @@ router.post(
           return group;
         })
       );
-
       return res.json(groups);
     } catch (e) {
       console.log(e);
@@ -79,5 +78,41 @@ router.post(
     }
   }
 );
+
+router.get("/:id", async (req, res) => {
+  try {
+    const group = await Group.findOne({ _id: req.params.id });
+    await res.json(group);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.delete("/delete/:id", async (req, res) => {
+  try {
+    await Group.findOneAndDelete({ _id: req.params.id });
+
+    //delete this group from all users
+    const desiredGroup = req.params.id;
+    const usersWithDesiredGroup = await User.find({
+      groups: desiredGroup,
+    });
+
+    for (const user of usersWithDesiredGroup) {
+      const updatedGroups = user.groups.filter((groupId) => {
+        return String(groupId) !== desiredGroup;
+      });
+
+      await User.findByIdAndUpdate(
+        { _id: user._id },
+        { groups: updatedGroups }
+      );
+    }
+
+    return res.json();
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 module.exports = router;

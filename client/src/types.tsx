@@ -39,6 +39,7 @@ export interface IUserGoogleProfile {
 }
 
 export interface IGroup {
+  _id?: string;
   groupName: string;
   groupMode: string;
   members: IGroupMember[];
