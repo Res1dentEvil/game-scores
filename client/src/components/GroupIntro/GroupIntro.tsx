@@ -43,7 +43,7 @@ export const GroupIntro = ({ group }: GroupIntroProps) => {
           <img className="" src={IconMPlayers} alt="" width="70" height="70" />
         </div>
         <div className="group-intro__item item__time" title="Зіграно часу">
-          <span>{group.members.length}</span>
+          <span>0</span>
           <img className="" src={IconTime} alt="" width="70" height="70" />
         </div>
       </div>

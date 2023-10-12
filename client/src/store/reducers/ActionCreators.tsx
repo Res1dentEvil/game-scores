@@ -1,5 +1,13 @@
 import axios, { AxiosError } from 'axios';
-import { IAuthBody, IGroup, IUser, IUserGoogleAuthData, IUserGoogleProfile } from '../../types';
+import {
+  IAuthBody,
+  IGroup,
+  IGroupMember,
+  IParty,
+  IUser,
+  IUserGoogleAuthData,
+  IUserGoogleProfile,
+} from '../../types';
 import { AppDispatch } from '../store';
 import { storeSlice } from './StoreSlice';
 import React, { Dispatch, SetStateAction } from 'react';
@@ -192,3 +200,28 @@ export const deleteGroup = (id: string, user: IUser) => async (dispatch: AppDisp
     const error = e as AxiosError;
   }
 };
+
+export const createGroupMember =
+  (body: {
+    groupID: string;
+    memberName: string;
+    email: string;
+    avatar: string;
+    memberParties: IParty[];
+  }) =>
+  async (dispatch: AppDispatch) => {
+    try {
+      dispatch(storeSlice.actions.fetchingStart());
+      const response = await axios
+        .post(`${baseURL}/api/member/create`, body, {
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .then((response) => {
+          // console.log(response.data);
+          dispatch(storeSlice.actions.fetchingEnd());
+        });
+    } catch (e) {
+      const error = e as AxiosError;
+      dispatch(storeSlice.actions.fetchingEnd());
+    }
+  };

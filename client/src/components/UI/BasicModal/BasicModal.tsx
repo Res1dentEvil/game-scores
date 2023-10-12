@@ -9,7 +9,7 @@ import { useState } from 'react';
 import Select from '@mui/material/Select';
 import { storeSlice } from '../../../store/reducers/StoreSlice';
 import { IGroup, IGroupMember, IParty } from '../../../types';
-import { createGroup } from '../../../store/reducers/ActionCreators';
+import { createGroup, createGroupMember } from '../../../store/reducers/ActionCreators';
 
 const style = {
   position: 'absolute',
@@ -28,6 +28,7 @@ interface IModalProps {
   handleCloseModal: () => void;
   openModal: boolean;
   modalType: string;
+  groupID: string;
 }
 
 interface IFormikErrors {
@@ -39,6 +40,7 @@ export default function BasicModal({
   handleCloseModal,
   openModal,
   modalType,
+  groupID,
 }: IModalProps) {
   const dispatch = useAppDispatch();
   const { isLoading } = useAppSelector((state) => state.storeReducer);
@@ -55,18 +57,19 @@ export default function BasicModal({
       return;
     }
 
-    const newMember: IGroupMember = {
+    const newMember = {
+      groupID: groupID,
       memberName: memberName,
       email: '',
       avatar: '',
       memberParties: [],
-      roles: [],
     };
-    handleCloseModal();
-    // await dispatch(createPartyMember(newMember));
+
+    await dispatch(createGroupMember(newMember));
     setMemberName('');
     setErrors('');
     (document.getElementById('form__create-member')! as HTMLFormElement).reset();
+    handleCloseModal();
     dispatch(storeSlice.actions.fetchingEnd());
   };
 
@@ -80,9 +83,8 @@ export default function BasicModal({
       >
         {modalType === 'member' ? (
           <Box sx={style}>
-            <form className="form" id="form__create-group">
+            <form className="form" id="form__create-member">
               <h2>Додати учасника</h2>
-
               <div className="input__container">
                 <TextField
                   label="Ім'я учасника"

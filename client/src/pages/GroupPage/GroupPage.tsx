@@ -89,6 +89,7 @@ export const GroupPage = () => {
         handleCloseModal={handleCloseModalMembers}
         openModal={openModalMembers}
         modalType="member"
+        groupID={id!}
       />
 
       <BasicModal
@@ -96,6 +97,7 @@ export const GroupPage = () => {
         handleCloseModal={handleCloseModalParty}
         openModal={openModalParty}
         modalType="party"
+        groupID={id!}
       />
     </div>
   );

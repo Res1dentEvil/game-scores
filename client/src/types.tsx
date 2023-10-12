@@ -62,5 +62,5 @@ export interface IGroupMember {
   email: string;
   avatar: string;
   memberParties: IParty[];
-  roles: string[];
+  // roles: string[];
 }

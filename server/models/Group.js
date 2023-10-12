@@ -4,7 +4,7 @@ const schema = new Schema({
   // id: { type: String, unique: true },
   groupName: { type: String, unique: true },
   groupMode: { type: String },
-  members: [{ type: String, ref: "GroupMember" }],
+  members: [{ type: Types.ObjectId, ref: "GroupMember" }],
   administrators: [{ userName: String, email: String }],
   parties: [{ type: Types.ObjectId, ref: "Party" }],
   followers: [{ type: Types.ObjectId, ref: "User" }],

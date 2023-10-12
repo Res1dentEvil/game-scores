@@ -6,7 +6,7 @@ const schema = new Schema({
   email: { type: String },
   avatar: { type: String },
   memberParties: [{ type: Types.ObjectId, ref: "Party" }],
-  roles: [{ type: String, default: "GROUP_MEMBER" }],
+  // roles: [{ type: String, default: "GROUP_MEMBER" }],
 });
 
 module.exports = model("GroupMember", schema);
