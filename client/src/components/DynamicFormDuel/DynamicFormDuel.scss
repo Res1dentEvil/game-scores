@@ -1,0 +1,63 @@
+#form__create-party {
+  box-shadow: none;
+  gap: 30px;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 5px;
+  background: white;
+  h4 {
+    color: red;
+  }
+
+  .form__default-fields,
+  .form__dynamic-fields {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+
+  .form__dynamic-fields {
+    gap: 25px 80px;
+  }
+}
+
+#btn__add-field {
+  min-width: auto;
+  font-size: 13px;
+  padding: 0px 10px;
+  color: #294b3e;
+}
+
+.input__party-create {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  min-width: 200px;
+
+  .winner-place {
+    position: absolute;
+    left: -40px;
+    top: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    width: 35px;
+    height: 35px;
+    background: #1A2B25;
+    border-radius: 50%;
+    color: white;
+    font-size: 13px;
+
+    img {
+      width: 11px;
+      height: 11px;
+    }
+  }
+}
+
+

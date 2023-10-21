@@ -4,6 +4,7 @@ const config = require("config");
 const authRouter = require("./routes/auth.routes");
 const groupRouter = require("./routes/group.routes");
 const memberRouter = require("./routes/member.routes");
+const partyRouter = require("./routes/party.routes");
 
 const app = express();
 const corsMiddleware = require("./middleware/cors.middleware");
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/group", groupRouter);
 app.use("/api/member", memberRouter);
+app.use("/api/party", partyRouter);
 
 const PORT = process.env.PORT || config.get("serverPort");
 const start = async () => {

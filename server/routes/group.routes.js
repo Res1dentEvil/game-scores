@@ -1,7 +1,7 @@
 const Router = require("express");
 const User = require("../models/User");
 const Group = require("../models/Group");
-
+const GroupMember = require("../models/GroupMember");
 const Role = require("../models/Role");
 const router = new Router();
 
@@ -19,7 +19,7 @@ router.post(
         isPremium,
       } = req.body;
       const firstFollowerEmail = administrators[0].email;
-      const firstFollower = await User.findOne({ firstFollowerEmail });
+      const firstFollower = await User.findOne({ email: firstFollowerEmail });
       const potentialGroup = await Group.findOne({ groupName });
       if (!potentialGroup) {
         const group = new Group({
@@ -35,7 +35,7 @@ router.post(
 
         //adding this group to the user groups
         const currentGroup = await Group.findOne({ groupName });
-        const user = await User.findOne({ firstFollowerEmail });
+        const user = await User.findOne({ email: firstFollowerEmail });
         const { id, groups } = user;
         await User.findOneAndUpdate(
           { _id: id },
@@ -114,5 +114,25 @@ router.delete("/delete/:id", async (req, res) => {
     console.log(error);
   }
 });
+
+// router.post(
+//   "/members",
+//
+//   async (req, res) => {
+//     try {
+//       const membersID = req.body;
+//       const members = await Promise.all(
+//         membersID.map(async (memberID) => {
+//           const member = await GroupMember.findOne({ _id: memberID });
+//           return member;
+//         })
+//       );
+//       return res.json(members);
+//     } catch (e) {
+//       console.log(e);
+//       res.send({ message: "members error" });
+//     }
+//   }
+// );
 
 module.exports = router;

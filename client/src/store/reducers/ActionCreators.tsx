@@ -225,3 +225,46 @@ export const createGroupMember =
       dispatch(storeSlice.actions.fetchingEnd());
     }
   };
+
+// export const getGroupMembers =
+//   (membersID: IGroupMember[], setGroupMembers: (arg0: []) => void) =>
+//   async (dispatch: AppDispatch) => {
+//     try {
+//       const response = await axios
+//         .post(`${baseURL}/api/group/members`, membersID, {
+//           headers: {
+//             Authorization: `Bearer ${localStorage.getItem('token')}`,
+//           },
+//         })
+//         .then((response) => {
+//           // console.log(response.data);
+//           setGroupMembers(response.data);
+//           dispatch(storeSlice.actions.fetchingEnd());
+//         });
+//     } catch (e) {
+//       const error = e as AxiosError;
+//       dispatch(storeSlice.actions.fetchingEnd());
+//     }
+//   };
+
+export const createParty = (party: IParty, groupID: string) => async (dispatch: AppDispatch) => {
+  try {
+    const response = await axios
+      .post(
+        `${baseURL}/api/party/create`,
+        { party, groupID },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        dispatch(storeSlice.actions.fetchingEnd());
+      });
+  } catch (e) {
+    const error = e as AxiosError;
+    dispatch(storeSlice.actions.fetchingEnd());
+  }
+};

@@ -1,3 +1,5 @@
+import { Field } from './components/DynamicForm/DynamicForm';
+
 export interface IState {
   isAuth: boolean;
   isLoading: boolean;
@@ -8,6 +10,7 @@ export interface IState {
 }
 
 export interface IUser {
+  _id: string;
   userName: string;
   email: string;
   picture: string;
@@ -45,15 +48,17 @@ export interface IGroup {
   members: IGroupMember[];
   administrators: [{ userName: string; email: string }];
   parties: IParty[];
+  followers: string[];
   isPremium: boolean;
 }
 
 export interface IParty {
-  date: Date;
+  date: string;
   gameName: string;
-  duration: number;
-  partyMembers: IGroupMember[];
-  winners: string[];
+  duration: string;
+  // partyMembers: IGroupMember[];
+  partyMembers: Field[];
+  winners: Field[];
   winDescription: string;
 }
 
@@ -61,6 +66,4 @@ export interface IGroupMember {
   memberName: string;
   email: string;
   avatar: string;
-  memberParties: IParty[];
-  // roles: string[];
 }

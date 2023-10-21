@@ -5,11 +5,12 @@ import Modal from '@mui/material/Modal';
 import { Button, FormControl, Input, InputLabel, MenuItem, TextField } from '@mui/material';
 import { Formik } from 'formik';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import Select from '@mui/material/Select';
 import { storeSlice } from '../../../store/reducers/StoreSlice';
 import { IGroup, IGroupMember, IParty } from '../../../types';
-import { createGroup, createGroupMember } from '../../../store/reducers/ActionCreators';
+import { createGroup, createGroupMember, getGroup } from '../../../store/reducers/ActionCreators';
+import { DynamicForm } from '../../DynamicForm/DynamicForm';
 
 const style = {
   position: 'absolute',
@@ -29,6 +30,7 @@ interface IModalProps {
   openModal: boolean;
   modalType: string;
   groupID: string;
+  setGroupState: Dispatch<SetStateAction<IGroup>>;
 }
 
 interface IFormikErrors {
@@ -41,6 +43,7 @@ export default function BasicModal({
   openModal,
   modalType,
   groupID,
+  setGroupState,
 }: IModalProps) {
   const dispatch = useAppDispatch();
   const { isLoading } = useAppSelector((state) => state.storeReducer);
@@ -66,6 +69,7 @@ export default function BasicModal({
     };
 
     await dispatch(createGroupMember(newMember));
+    await dispatch(getGroup(groupID, setGroupState));
     setMemberName('');
     setErrors('');
     (document.getElementById('form__create-member')! as HTMLFormElement).reset();
@@ -81,34 +85,27 @@ export default function BasicModal({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        {modalType === 'member' ? (
-          <Box sx={style}>
-            <form className="form" id="form__create-member">
-              <h2>Додати учасника</h2>
-              <div className="input__container">
-                <TextField
-                  label="Ім'я учасника"
-                  onChange={(e) => setMemberName(e.target.value)}
-                  size="small"
-                  value={memberName}
-                />
-              </div>
-              <Button
-                variant="contained"
-                className="btn_registration"
-                // type={'submit'}
-                onClick={handleSubmit}
-                disabled={isLoading}
-              >
-                Додати учасника
-              </Button>
-            </form>
-          </Box>
-        ) : (
-          <Box sx={style}>
-            <button>Створити партію</button>
-          </Box>
-        )}
+        <Box sx={style}>
+          <form className="form" id="form__create-member">
+            <h2>Додати учасника</h2>
+            <div className="input__container">
+              <TextField
+                label="Ім'я учасника"
+                onChange={(e) => setMemberName(e.target.value)}
+                size="small"
+                value={memberName}
+              />
+            </div>
+            <Button
+              variant="contained"
+              className="btn_registration"
+              onClick={handleSubmit}
+              disabled={isLoading}
+            >
+              Додати учасника
+            </Button>
+          </form>
+        </Box>
       </Modal>
     </div>
   );

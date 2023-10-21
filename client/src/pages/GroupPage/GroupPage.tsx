@@ -4,9 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { deleteGroup, getGroup } from '../../store/reducers/ActionCreators';
 import { IGroup } from '../../types';
-import { Button } from '../../components/UI/Button/Button';
-import { Box, Modal } from '@mui/material';
 import BasicModal from '../../components/UI/BasicModal/BasicModal';
+import Preloader from '../../components/UI/Preloader/Preloader';
 
 export const GroupPage = () => {
   const [groupState, setGroupState] = useState({} as IGroup);
@@ -32,26 +31,53 @@ export const GroupPage = () => {
     }
   }, []);
 
+  if (!groupState.followers) {
+    return <Preloader />;
+  }
+  const admins = groupState.administrators.map((admin) => {
+    return Object.values(admin);
+  });
+
   return (
     <div className="container group-page">
       <div className="group-page__row">
         <h2>{groupState.groupName}</h2>
       </div>
       <div className="group-page__row">
-        <button
-          onClick={() => {
-            handleOpenModalParty();
-          }}
-        >
-          Почати нову партію
-        </button>
+        {groupState.members.length > 0 && (
+          <button
+            onClick={() => {
+              navigate(`/group/${id}/create-party`);
+            }}
+          >
+            Почати нову партію
+          </button>
+        )}
+
         <button
           onClick={() => {
             handleOpenModalMembers();
+            // dispatch(getGroup(id!, setGroupState));
+            // navigate(`/group/${id}/create-party`);
           }}
         >
           Додати нових учасників
         </button>
+
+        {!groupState.administrators
+          .map((admin) => {
+            return Object.values(admin);
+          })
+          .flat()
+          .includes(currentUser.userName) && (
+          <div>
+            {groupState.followers.includes(currentUser._id) ? (
+              <button onClick={() => {}}>Відписатися</button>
+            ) : (
+              <button onClick={() => {}}>Підписатися</button>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="group-page__row">
@@ -73,32 +99,43 @@ export const GroupPage = () => {
         <div className="group-page__dashboard-item">members table</div>
       </div>
       <div className="group-page__row">
-        <div className="group-page__dashboard-item">parties table under spoiler</div>
+        <div className="group-page__dashboard-item">
+          <h4>parties table under spoiler</h4>
+          {groupState.parties.map((party, index) => {
+            return (
+              <div key={Date.now() + index}>
+                {party.date} {party.gameName}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      {/*<button*/}
-      {/*  onClick={async () => {*/}
-      {/*    await dispatch(deleteGroup(id!, currentUser));*/}
-      {/*    navigate('/profile');*/}
-      {/*  }}*/}
-      {/*>*/}
-      {/*  delete group*/}
-      {/*</button>*/}
+      <button
+        onClick={async () => {
+          await dispatch(deleteGroup(id!, currentUser));
+          navigate('/profile');
+        }}
+      >
+        delete group
+      </button>
+
       <BasicModal
         handleOpenModal={handleOpenModalMembers}
         handleCloseModal={handleCloseModalMembers}
         openModal={openModalMembers}
         modalType="member"
         groupID={id!}
+        setGroupState={setGroupState}
       />
 
-      <BasicModal
-        handleOpenModal={handleOpenModalParty}
-        handleCloseModal={handleCloseModalParty}
-        openModal={openModalParty}
-        modalType="party"
-        groupID={id!}
-      />
+      {/*<BasicModal*/}
+      {/*  handleOpenModal={handleOpenModalParty}*/}
+      {/*  handleCloseModal={handleCloseModalParty}*/}
+      {/*  openModal={openModalParty}*/}
+      {/*  modalType="party"*/}
+      {/*  groupID={id!}*/}
+      {/*/>*/}
     </div>
   );
 };

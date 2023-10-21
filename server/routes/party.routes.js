@@ -1,5 +1,6 @@
 const Router = require("express");
 const GroupMember = require("../models/GroupMember");
+const Party = require("../models/Party");
 const Group = require("../models/Group");
 
 const Role = require("../models/Role");
@@ -10,36 +11,36 @@ router.post(
 
   async (req, res) => {
     try {
-      const { groupID, memberName, email, avatar } = req.body;
+      const { party, groupID } = req.body;
       const currentGroup = await Group.findOne({ _id: groupID });
+
       if (currentGroup) {
-        const member = {
-          memberName: memberName,
-          email: email,
-          avatar: avatar,
-          group: groupID,
+        const newParty = {
+          date: party.date,
+          gameName: party.gameName,
+          duration: party.duration,
+          partyMembers: party.partyMembers,
+          winners: party.winners,
+          winDescription: party.winDescription,
         };
-        // await member.save();
+        // await newParty.save();
 
         const editGroup = await Group.findOne({ _id: groupID });
-        const { members } = editGroup;
-
+        const { parties } = editGroup;
         await Group.findOneAndUpdate(
           { _id: groupID },
           {
-            members: [...members, member],
+            parties: [...parties, newParty],
           }
         );
-
         return res.json(editGroup);
-
         // return res.json({ message: `group was created` });
       } else {
-        return res.status(400).json({ message: `member error` });
+        return res.status(400).json({ message: `party error` });
       }
     } catch (e) {
       console.log(e);
-      res.send({ message: "create member error" });
+      res.send({ message: "create party error" });
     }
   }
 );

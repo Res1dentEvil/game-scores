@@ -51,6 +51,7 @@ export const CreateGroupPage = () => {
       members: [] as IGroupMember[],
       administrators: [{ userName: userGoogleProfile.name, email: userGoogleProfile.email }],
       parties: [] as IParty[],
+      followers: [],
       isPremium: false,
     };
     await dispatch(createGroup(newGroup, setIsShowAlertSuccess, setIsShowAlertError, redirectFunc));
