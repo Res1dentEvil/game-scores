@@ -50,9 +50,11 @@ export interface IGroup {
   parties: IParty[];
   followers: string[];
   isPremium: boolean;
+  gamesList?: [{ title: string; image: string }];
 }
 
 export interface IParty {
+  _id?: string;
   date: string;
   gameName: string;
   duration: string;

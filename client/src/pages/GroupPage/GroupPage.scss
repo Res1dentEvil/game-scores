@@ -5,6 +5,7 @@
   justify-content: flex-start;
   gap: 20px;
 
+
   .group-page__row {
     //border: 1px solid rgba(104, 104, 104, 0.26);
     display: flex;
@@ -30,14 +31,15 @@
   h2 {
     margin: 0 auto;
   }
+
   .group-page__dashboard-item {
     width: 49%;
-    height: 185px;
+    min-height: 185px;
     background: white;
     border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.10) 0px 0px 15px;
     border: 1px solid rgba(0, 0, 0, 0.11);
-
+    padding: 15px;
   }
 
 }

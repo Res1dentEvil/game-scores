@@ -226,6 +226,24 @@ export const createGroupMember =
     }
   };
 
+export const createGroupGame =
+  (body: { groupID: string; title: string; image: string }) => async (dispatch: AppDispatch) => {
+    try {
+      dispatch(storeSlice.actions.fetchingStart());
+      const response = await axios
+        .post(`${baseURL}/api/game/create`, body, {
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .then((response) => {
+          console.log(response.data);
+          dispatch(storeSlice.actions.fetchingEnd());
+        });
+    } catch (e) {
+      const error = e as AxiosError;
+      dispatch(storeSlice.actions.fetchingEnd());
+    }
+  };
+
 // export const getGroupMembers =
 //   (membersID: IGroupMember[], setGroupMembers: (arg0: []) => void) =>
 //   async (dispatch: AppDispatch) => {

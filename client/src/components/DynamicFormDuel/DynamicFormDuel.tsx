@@ -8,6 +8,7 @@ import { useAppDispatch } from '../../hooks/redux';
 import Preloader from '../UI/Preloader/Preloader';
 import { formatDate } from '../../helpers/formatingDate';
 import Cup1 from '../../assets/img/cup1.svg';
+import IconGames from '../../assets/img/games.svg';
 
 export interface Field {
   name: string;
@@ -83,16 +84,48 @@ export const DynamicFormDuel = ({ groupState }: DynamicFormProps) => {
       <div className="create-party">
         <form className="form" id="form__create-party">
           <div className="form__default-fields">
-            <TextField
-              label="Назва гри"
-              type="text"
-              name="game"
-              size="small"
-              value={gameName}
-              onChange={(e) => {
-                setGameName(e.target.value);
-              }}
-            />
+            {/*<TextField*/}
+            {/*  label="Назва гри"*/}
+            {/*  type="text"*/}
+            {/*  name="game"*/}
+            {/*  size="small"*/}
+            {/*  value={gameName}*/}
+            {/*  onChange={(e) => {*/}
+            {/*    setGameName(e.target.value);*/}
+            {/*  }}*/}
+            {/*/>*/}
+            <div className="select__container">
+              <FormControl fullWidth size="small">
+                <InputLabel id="demo-simple-select-label">Назва гри</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  name="name"
+                  value={gameName}
+                  size="small"
+                  label="Назва гри"
+                  onChange={(e) => {
+                    setGameName(e.target.value);
+                  }}
+                >
+                  {groupState.gamesList!.map((game, optionIndex) => {
+                    return (
+                      <MenuItem key={optionIndex} value={game.title}>
+                        <div className="select-item">
+                          <img
+                            className="select-item__img"
+                            src={game.image.length ? game.image : IconGames}
+                            alt="game icon"
+                          />
+                          {game.title.slice(0, 20)}
+                        </div>
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            </div>
+
             <TextField
               label="Тривалість гри, хв"
               type="number"

@@ -6,18 +6,19 @@ import { deleteGroup, getGroup } from '../../store/reducers/ActionCreators';
 import { IGroup } from '../../types';
 import BasicModal from '../../components/UI/BasicModal/BasicModal';
 import Preloader from '../../components/UI/Preloader/Preloader';
+import { PartiesTable } from '../../components/PartiesTable/PartiesTable';
 
 export const GroupPage = () => {
   const [groupState, setGroupState] = useState({} as IGroup);
 
   const [openModalMembers, setOpenModalMembers] = React.useState(false);
-  const [openModalParty, setOpenModalParty] = React.useState(false);
+  const [openModalGame, setOpenModalGame] = React.useState(false);
 
   const handleOpenModalMembers = () => setOpenModalMembers(true);
   const handleCloseModalMembers = () => setOpenModalMembers(false);
 
-  const handleOpenModalParty = () => setOpenModalParty(true);
-  const handleCloseModalParty = () => setOpenModalParty(false);
+  const handleOpenModalGame = () => setOpenModalGame(true);
+  const handleCloseModalGame = () => setOpenModalGame(false);
 
   const { id } = useParams();
   const dispatch = useAppDispatch();
@@ -44,7 +45,7 @@ export const GroupPage = () => {
         <h2>{groupState.groupName}</h2>
       </div>
       <div className="group-page__row">
-        {groupState.members.length > 0 && (
+        {groupState.members.length > 0 && groupState.gamesList!.length > 0 && (
           <button
             onClick={() => {
               navigate(`/group/${id}/create-party`);
@@ -57,11 +58,17 @@ export const GroupPage = () => {
         <button
           onClick={() => {
             handleOpenModalMembers();
-            // dispatch(getGroup(id!, setGroupState));
-            // navigate(`/group/${id}/create-party`);
           }}
         >
           Додати нових учасників
+        </button>
+
+        <button
+          onClick={() => {
+            handleOpenModalGame();
+          }}
+        >
+          Додати гру до мого списку
         </button>
 
         {!groupState.administrators
@@ -90,24 +97,24 @@ export const GroupPage = () => {
       </div>
       <div className="group-page__row">
         <div className="group-page__dashboard-item">win % rate</div>
-        <div className="group-page__dashboard-item">win point rate</div>
+        {groupState.groupMode === 'Duel' ? (
+          <div className="group-page__dashboard-item">diagram games %</div>
+        ) : (
+          <div className="group-page__dashboard-item">win point rate</div>
+        )}
       </div>
-      <div className="group-page__row">
-        <div className="group-page__dashboard-item">diagram games %</div>
-      </div>
+      {groupState.groupMode === 'Mass PvP' && (
+        <div className="group-page__row">
+          <div className="group-page__dashboard-item">diagram games %</div>
+        </div>
+      )}
+
       <div className="group-page__row">
         <div className="group-page__dashboard-item">members table</div>
       </div>
       <div className="group-page__row">
         <div className="group-page__dashboard-item">
-          <h4>parties table under spoiler</h4>
-          {groupState.parties.map((party, index) => {
-            return (
-              <div key={Date.now() + index}>
-                {party.date} {party.gameName}
-              </div>
-            );
-          })}
+          <PartiesTable groupState={groupState} />
         </div>
       </div>
 
@@ -129,13 +136,14 @@ export const GroupPage = () => {
         setGroupState={setGroupState}
       />
 
-      {/*<BasicModal*/}
-      {/*  handleOpenModal={handleOpenModalParty}*/}
-      {/*  handleCloseModal={handleCloseModalParty}*/}
-      {/*  openModal={openModalParty}*/}
-      {/*  modalType="party"*/}
-      {/*  groupID={id!}*/}
-      {/*/>*/}
+      <BasicModal
+        handleOpenModal={handleOpenModalGame}
+        handleCloseModal={handleCloseModalGame}
+        openModal={openModalGame}
+        modalType="game"
+        groupID={id!}
+        setGroupState={setGroupState}
+      />
     </div>
   );
 };

@@ -1,16 +1,16 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { Button, FormControl, Input, InputLabel, MenuItem, TextField } from '@mui/material';
-import { Formik } from 'formik';
+import { Button, TextField } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { Dispatch, SetStateAction, useState } from 'react';
-import Select from '@mui/material/Select';
 import { storeSlice } from '../../../store/reducers/StoreSlice';
-import { IGroup, IGroupMember, IParty } from '../../../types';
-import { createGroup, createGroupMember, getGroup } from '../../../store/reducers/ActionCreators';
-import { DynamicForm } from '../../DynamicForm/DynamicForm';
+import { IGroup } from '../../../types';
+import {
+  createGroupGame,
+  createGroupMember,
+  getGroup,
+} from '../../../store/reducers/ActionCreators';
 
 const style = {
   position: 'absolute',
@@ -49,9 +49,12 @@ export default function BasicModal({
   const { isLoading } = useAppSelector((state) => state.storeReducer);
 
   const [memberName, setMemberName] = useState('');
+  const [gameTitle, setGameTitle] = useState('');
+  const [gameImage, setGameImage] = useState('');
+
   const [errors, setErrors] = useState('');
 
-  const handleSubmit = async (e: React.MouseEvent) => {
+  const handleSubmitMember = async (e: React.MouseEvent) => {
     e.preventDefault();
 
     if (!memberName) {
@@ -77,6 +80,31 @@ export default function BasicModal({
     dispatch(storeSlice.actions.fetchingEnd());
   };
 
+  const handleSubmitGame = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (!gameTitle) {
+      setErrors('title field cannot be empty');
+      dispatch(storeSlice.actions.fetchingEnd());
+      return;
+    }
+
+    const game = {
+      groupID: groupID,
+      title: gameTitle,
+      image: gameImage,
+    };
+
+    await dispatch(createGroupGame(game));
+    await dispatch(getGroup(groupID, setGroupState));
+    setGameTitle('');
+    setGameImage('');
+    setErrors('');
+    (document.getElementById('form__create-member')! as HTMLFormElement).reset();
+    handleCloseModal();
+    dispatch(storeSlice.actions.fetchingEnd());
+  };
+
   return (
     <div>
       <Modal
@@ -85,27 +113,57 @@ export default function BasicModal({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-          <form className="form" id="form__create-member">
-            <h2>Додати учасника</h2>
-            <div className="input__container">
-              <TextField
-                label="Ім'я учасника"
-                onChange={(e) => setMemberName(e.target.value)}
-                size="small"
-                value={memberName}
-              />
-            </div>
-            <Button
-              variant="contained"
-              className="btn_registration"
-              onClick={handleSubmit}
-              disabled={isLoading}
-            >
-              Додати учасника
-            </Button>
-          </form>
-        </Box>
+        {modalType === 'member' ? (
+          <Box sx={style}>
+            <form className="form" id="form__create-member">
+              <h2>Додати учасника</h2>
+              <div className="input__container">
+                <TextField
+                  label="Ім'я учасника"
+                  onChange={(e) => setMemberName(e.target.value)}
+                  size="small"
+                  value={memberName}
+                />
+              </div>
+              <Button
+                variant="contained"
+                className="btn_registration"
+                onClick={handleSubmitMember}
+                disabled={isLoading}
+              >
+                Додати учасника
+              </Button>
+            </form>
+          </Box>
+        ) : (
+          <Box sx={style}>
+            <form className="form" id="form__create-member">
+              <h2>Додати гру</h2>
+              <div className="input__container">
+                <TextField
+                  label="Назва гри"
+                  onChange={(e) => setGameTitle(e.target.value)}
+                  size="small"
+                  value={gameTitle}
+                />
+                <TextField
+                  label="Посилання на іконку гри"
+                  onChange={(e) => setGameImage(e.target.value)}
+                  size="small"
+                  value={gameImage}
+                />
+              </div>
+              <Button
+                variant="contained"
+                className="btn_registration"
+                onClick={handleSubmitGame}
+                disabled={isLoading}
+              >
+                Додати гру
+              </Button>
+            </form>
+          </Box>
+        )}
       </Modal>
     </div>
   );

@@ -21,6 +21,7 @@ const schema = new Schema({
   ],
   followers: [{ type: Types.ObjectId, ref: "User" }],
   isPremium: { type: Boolean, default: false },
+  gamesList: [{ title: String, image: String }],
 });
 
 module.exports = model("Group", schema);

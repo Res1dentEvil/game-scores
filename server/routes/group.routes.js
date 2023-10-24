@@ -30,6 +30,7 @@ router.post(
           parties: parties,
           followers: [firstFollower],
           isPremium: isPremium,
+          gamesList: [],
         });
         await group.save();
 
@@ -114,25 +115,5 @@ router.delete("/delete/:id", async (req, res) => {
     console.log(error);
   }
 });
-
-// router.post(
-//   "/members",
-//
-//   async (req, res) => {
-//     try {
-//       const membersID = req.body;
-//       const members = await Promise.all(
-//         membersID.map(async (memberID) => {
-//           const member = await GroupMember.findOne({ _id: memberID });
-//           return member;
-//         })
-//       );
-//       return res.json(members);
-//     } catch (e) {
-//       console.log(e);
-//       res.send({ message: "members error" });
-//     }
-//   }
-// );
 
 module.exports = router;
