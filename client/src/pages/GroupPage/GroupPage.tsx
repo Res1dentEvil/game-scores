@@ -7,6 +7,7 @@ import { IGroup } from '../../types';
 import BasicModal from '../../components/UI/BasicModal/BasicModal';
 import Preloader from '../../components/UI/Preloader/Preloader';
 import { PartiesTable } from '../../components/PartiesTable/PartiesTable';
+import { MembersTable } from '../../components/MembersTable/MembersTable';
 
 export const GroupPage = () => {
   const [groupState, setGroupState] = useState({} as IGroup);
@@ -110,7 +111,9 @@ export const GroupPage = () => {
       )}
 
       <div className="group-page__row">
-        <div className="group-page__dashboard-item">members table</div>
+        <div className="group-page__dashboard-item">
+          <MembersTable groupState={groupState} />
+        </div>
       </div>
       <div className="group-page__row">
         <div className="group-page__dashboard-item">

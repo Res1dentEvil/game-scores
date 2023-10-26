@@ -20,54 +20,56 @@ export const PartiesTable = ({ groupState }: PartiesTableProps) => {
   };
 
   return (
-    <div>
+    <div className="parties-table">
       <table>
-        <tr>
-          <th>Дата</th>
-          <th>Гра</th>
-          <th>Учасники</th>
-          <th>Переможці</th>
-        </tr>
-        {groupState.parties.reverse().map((party, index) => {
-          return (
-            <tr key={Date.now() + index}>
-              <td>{formattingDate(party.date)}</td>
-              <td>{party.gameName}</td>
-              <td>
-                {party.partyMembers.map((member) => {
-                  return (
-                    <div key={Date.now() + party._id!}>
-                      {member.name} {memberPoint(member.point)}
-                    </div>
-                  );
-                })}
-              </td>
-              <td>
-                {party.winners
-                  .map((winner, i) => {
+        <tbody>
+          <tr>
+            <th>Дата</th>
+            <th>Гра</th>
+            <th>Учасники</th>
+            <th>Переможці</th>
+          </tr>
+          {groupState.parties.reverse().map((party, index) => {
+            return (
+              <tr key={Date.now() + index}>
+                <td>{formattingDate(party.date)}</td>
+                <td>{party.gameName}</td>
+                <td>
+                  {party.partyMembers.map((member) => {
                     return (
-                      <div className="winner" key={`winner${i}`}>
-                        <div
-                          className="winner-place"
-                          style={
-                            i === 0
-                              ? { background: '#DAA520' }
-                              : i === 1
-                              ? { background: '#C0C0C0' }
-                              : { background: '#BA7739' }
-                          }
-                        >
-                          {i + 1}
-                        </div>
-                        {winner.name}
+                      <div key={Math.random() + party._id!}>
+                        {member.name} {memberPoint(member.point)}
                       </div>
                     );
-                  })
-                  .slice(0, winnersCount)}
-              </td>
-            </tr>
-          );
-        })}
+                  })}
+                </td>
+                <td>
+                  {party.winners
+                    .map((winner, i) => {
+                      return (
+                        <div className="winner" key={`winner${i}`}>
+                          <div
+                            className="winner-place"
+                            style={
+                              i === 0
+                                ? { background: '#DAA520' }
+                                : i === 1
+                                ? { background: '#C0C0C0' }
+                                : { background: '#BA7739' }
+                            }
+                          >
+                            {i + 1}
+                          </div>
+                          {winner.name}
+                        </div>
+                      );
+                    })
+                    .slice(0, winnersCount)}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
       </table>
     </div>
   );
