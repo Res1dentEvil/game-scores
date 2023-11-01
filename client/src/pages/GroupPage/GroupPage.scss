@@ -35,11 +35,36 @@
   .group-page__dashboard-item {
     width: 49%;
     min-height: 185px;
-    background: white;
+    background: linear-gradient(90deg, rgba(249, 248, 249, 1) 0%, rgba(255, 255, 255, 1) 100%);
     border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.10) 0px 0px 15px;
     border: 1px solid rgba(0, 0, 0, 0.11);
     padding: 15px;
+
+    .dashboard-item__cup {
+      height: 130px;
+    }
+
+    .dashboard-item__winner-description {
+      font-size: 14px;
+      opacity: 0.8;
+      margin: 0px 0 15px;
+    }
+
+    .dashboard-item__win-rate {
+      font-size: 23px;
+      font-weight: bold;
+    }
+  }
+  .winner-dashboard-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .diagram-dashboard-item {
+
   }
 
 }
+

@@ -8,9 +8,23 @@ import BasicModal from '../../components/UI/BasicModal/BasicModal';
 import Preloader from '../../components/UI/Preloader/Preloader';
 import { PartiesTable } from '../../components/PartiesTable/PartiesTable';
 import { MembersTable } from '../../components/MembersTable/MembersTable';
+import { tableData } from '../../helpers/getMemberTableData';
+import { getAvatar } from '../../helpers/getAvatar';
+import Player from '../../assets/img/players4.svg';
+import Cup from '../../assets/img/wincup.png';
+import { GamesChartDiagram } from '../../components/GamesChart/GamesChartDiagram';
+
+interface MemberData {
+  playedGamesNames: string[];
+  gamesWon: string[];
+  points: number;
+  winRate: number;
+}
 
 export const GroupPage = () => {
   const [groupState, setGroupState] = useState({} as IGroup);
+  // const [bestWinRate, setBestWinRate] = useState({ name: '', winRatio: 0 });
+  const [sortedData, setSortedData] = useState<Record<string, MemberData>>({});
 
   const [openModalMembers, setOpenModalMembers] = React.useState(false);
   const [openModalGame, setOpenModalGame] = React.useState(false);
@@ -33,13 +47,18 @@ export const GroupPage = () => {
     }
   }, []);
 
-  if (!groupState.followers) {
+  useEffect(() => {
+    if (groupState.gamesList) {
+      tableData(groupState, setSortedData);
+    }
+  }, [groupState.gamesList]);
+
+  if (!groupState.followers || !Object.keys(sortedData)[0]) {
     return <Preloader />;
   }
   const admins = groupState.administrators.map((admin) => {
     return Object.values(admin);
   });
-
   return (
     <div className="container group-page">
       <div className="group-page__row">
@@ -97,9 +116,32 @@ export const GroupPage = () => {
         </div>
       </div>
       <div className="group-page__row">
-        <div className="group-page__dashboard-item">win % rate</div>
+        <div className="group-page__dashboard-item winner-dashboard-item">
+          <div>
+            <img
+              src={
+                getAvatar(Object.keys(sortedData)[0], groupState).length
+                  ? getAvatar(Object.keys(sortedData)[0], groupState)
+                  : Player
+              }
+              alt=""
+              className="member-avatar"
+              width={'60px'}
+            ></img>
+            <h3>Вітаємо, {Object.keys(sortedData)[0]}!</h3>
+            <div className="dashboard-item__winner-description">Найвищий показник перемог</div>
+            <div className="dashboard-item__win-rate">
+              {sortedData[Object.keys(sortedData)[0]].winRate.toFixed(1)}%
+            </div>
+          </div>
+
+          <img className="dashboard-item__cup" src={Cup} alt="winner cup" />
+        </div>
+
         {groupState.groupMode === 'Duel' ? (
-          <div className="group-page__dashboard-item">diagram games %</div>
+          <div className="group-page__dashboard-item diagram-dashboard-item">
+            <GamesChartDiagram groupState={groupState} />
+          </div>
         ) : (
           <div className="group-page__dashboard-item">win point rate</div>
         )}
@@ -112,7 +154,7 @@ export const GroupPage = () => {
 
       <div className="group-page__row">
         <div className="group-page__dashboard-item">
-          <MembersTable groupState={groupState} />
+          <MembersTable sortedData={sortedData} groupState={groupState} />
         </div>
       </div>
       <div className="group-page__row">
