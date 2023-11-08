@@ -4,6 +4,7 @@ const Group = require("../models/Group");
 const GroupMember = require("../models/GroupMember");
 const Role = require("../models/Role");
 const router = new Router();
+const { Types } = require("mongoose");
 
 router.post(
   "/create",
@@ -61,6 +62,79 @@ router.post(
 );
 
 router.post(
+  "/subscribe",
+
+  async (req, res) => {
+    try {
+      const { groupID, userID } = req.body;
+      const group = await Group.findOne({ _id: groupID });
+
+      if (group) {
+        await Group.findOneAndUpdate(
+          { _id: groupID },
+          {
+            followers: [...group.followers, userID],
+          }
+        );
+
+        const user = await User.findOne({ _id: userID });
+        await User.findOneAndUpdate(
+          { _id: userID },
+          {
+            groups: [...user.groups, group._id],
+          }
+        );
+
+        return res.json();
+      } else {
+        return res.status(400).json({ message: `group subscribe error` });
+      }
+    } catch (e) {
+      console.log(e);
+      res.send({ message: "group subscribe error" });
+    }
+  }
+);
+
+router.post("/unsubscribe", async (req, res) => {
+  try {
+    const { groupID, userID } = req.body;
+    const group = await Group.findOne({ _id: groupID });
+
+    if (group) {
+      const updatedFollowers = group.followers.filter(
+        (id) => id.valueOf().toString() !== userID
+      );
+
+      await Group.findOneAndUpdate(
+        { _id: groupID },
+        {
+          followers: [...updatedFollowers],
+        }
+      );
+
+      const user = await User.findOne({ _id: userID });
+      const updatedUserGroups = user.groups.filter(
+        (id) => id.valueOf().toString() !== groupID
+      );
+      await User.findOneAndUpdate(
+        { _id: userID },
+        {
+          groups: [...updatedUserGroups],
+        }
+      );
+
+      return res.json();
+    } else {
+      return res.status(400).json({ message: `group unsubscribe error` });
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({ message: "group unsubscribe error" });
+  }
+});
+
+router.post(
   "/profile/groups",
 
   async (req, res) => {
@@ -84,6 +158,15 @@ router.get("/:id", async (req, res) => {
   try {
     const group = await Group.findOne({ _id: req.params.id });
     await res.json(group);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/", async (req, res) => {
+  try {
+    const groups = await Group.find({});
+    await res.json(groups);
   } catch (error) {
     console.log(error);
   }

@@ -17,9 +17,7 @@ import { GroupPage } from '../../pages/GroupPage/GroupPage';
 import { CreatePartyPage } from '../../pages/CreatePartyPage/CreatePartyPage';
 
 export const App = () => {
-  const { userGoogleAuthData, userGoogleProfile, isLoading, isAuth } = useAppSelector(
-    (state) => state.storeReducer
-  );
+  const { userGoogleAuthData, isAuth } = useAppSelector((state) => state.storeReducer);
   const dispatch = useAppDispatch();
 
   const login = useGoogleLogin({

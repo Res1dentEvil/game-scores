@@ -1,6 +1,7 @@
 const { Schema, model, Types } = require("mongoose");
 
 const schema = new Schema({
+  // _id: { type: Types.ObjectId },
   groupName: { type: String, unique: true },
   groupMode: { type: String },
   // members: [{ type: Types.ObjectId, ref: "GroupMember" }],

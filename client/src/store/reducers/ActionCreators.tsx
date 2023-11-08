@@ -177,8 +177,33 @@ export const getGroup =
           },
         })
         .then((response) => {
-          // console.log(response.data);
+          console.log(response.data.followers);
           setGroupState(response.data);
+          dispatch(storeSlice.actions.fetchingEnd());
+        });
+    } catch (e) {
+      const error = e as AxiosError;
+      dispatch(storeSlice.actions.fetchingEnd());
+    }
+  };
+
+export const getAllGroups =
+  (
+    setAllGroups: Dispatch<SetStateAction<IGroup[]>>,
+    setFilteredGroups: Dispatch<SetStateAction<IGroup[]>>
+  ) =>
+  async (dispatch: AppDispatch) => {
+    try {
+      const response = await axios
+        .get(`${baseURL}/api/group`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((response) => {
+          // console.log(response.data);
+          setAllGroups(response.data);
+          setFilteredGroups(response.data);
           dispatch(storeSlice.actions.fetchingEnd());
         });
     } catch (e) {
@@ -244,27 +269,6 @@ export const createGroupGame =
     }
   };
 
-// export const getGroupMembers =
-//   (membersID: IGroupMember[], setGroupMembers: (arg0: []) => void) =>
-//   async (dispatch: AppDispatch) => {
-//     try {
-//       const response = await axios
-//         .post(`${baseURL}/api/group/members`, membersID, {
-//           headers: {
-//             Authorization: `Bearer ${localStorage.getItem('token')}`,
-//           },
-//         })
-//         .then((response) => {
-//           // console.log(response.data);
-//           setGroupMembers(response.data);
-//           dispatch(storeSlice.actions.fetchingEnd());
-//         });
-//     } catch (e) {
-//       const error = e as AxiosError;
-//       dispatch(storeSlice.actions.fetchingEnd());
-//     }
-//   };
-
 export const createParty = (party: IParty, groupID: string) => async (dispatch: AppDispatch) => {
   try {
     const response = await axios
@@ -286,3 +290,51 @@ export const createParty = (party: IParty, groupID: string) => async (dispatch: 
     dispatch(storeSlice.actions.fetchingEnd());
   }
 };
+
+export const subscribeGroup =
+  (groupID: string, userID: string, setGroupState: React.Dispatch<React.SetStateAction<IGroup>>) =>
+  async (dispatch: AppDispatch) => {
+    try {
+      const response = await axios
+        .post(
+          `${baseURL}/api/group/subscribe`,
+          { groupID, userID },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        )
+        .then((response) => {
+          getGroup(groupID, setGroupState);
+          dispatch(storeSlice.actions.fetchingEnd());
+        });
+    } catch (e) {
+      const error = e as AxiosError;
+      dispatch(storeSlice.actions.fetchingEnd());
+    }
+  };
+
+export const unSubscribeGroup =
+  (groupID: string, userID: string, setGroupState: React.Dispatch<React.SetStateAction<IGroup>>) =>
+  async (dispatch: AppDispatch) => {
+    try {
+      const response = await axios
+        .post(
+          `${baseURL}/api/group/unsubscribe`,
+          { groupID, userID },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        )
+        .then((response) => {
+          // getGroup(groupID, setGroupState);
+          dispatch(storeSlice.actions.fetchingEnd());
+        });
+    } catch (e) {
+      const error = e as AxiosError;
+      dispatch(storeSlice.actions.fetchingEnd());
+    }
+  };
