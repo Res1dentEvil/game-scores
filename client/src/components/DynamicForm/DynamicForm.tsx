@@ -7,6 +7,7 @@ import { createParty, getGroup } from '../../store/reducers/ActionCreators';
 import { useAppDispatch } from '../../hooks/redux';
 import Preloader from '../UI/Preloader/Preloader';
 import { formatDate } from '../../helpers/formatingDate';
+import IconGames from '../../assets/img/games.svg';
 
 export interface Field {
   name: string;
@@ -17,7 +18,6 @@ interface DynamicFormProps {
 }
 
 export const DynamicForm = ({ groupState }: DynamicFormProps) => {
-  // const [groupState, setGroupState] = useState({} as IGroup);
   const [groupMembers, setGroupMembers] = useState<IGroupMember[]>([]);
   const [members, setMembers] = useState<Field[]>([{ name: '', point: '' }]);
   const [gameName, setGameName] = useState('');
@@ -29,16 +29,9 @@ export const DynamicForm = ({ groupState }: DynamicFormProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // useEffect(() => {
-  //   if (id) {
-  //     dispatch(getGroup(id, setGroupState));
-  //   }
-  // }, []);
-
   useEffect(() => {
     if (groupState.groupName) {
       setGroupMembers(groupState.members);
-      // dispatch(getGroupMembers(groupState.members, setGroupMembers));
     }
   }, [groupState]);
 
@@ -62,6 +55,23 @@ export const DynamicForm = ({ groupState }: DynamicFormProps) => {
     const validMembers = members.filter(
       (member) => member.name.length > 0 && member.point.length > 0
     );
+
+    const uniqueNames = new Set();
+    const duplicates: string[] = [];
+
+    validMembers.forEach((member) => {
+      if (!uniqueNames.has(member.name)) {
+        uniqueNames.add(member.name);
+      } else {
+        duplicates.push(member.name);
+      }
+    });
+
+    if (duplicates.length > 0) {
+      setError(true);
+      return;
+    }
+
     const getWinners = () => {
       validMembers.sort(function (a, b) {
         return parseInt(b.point) - parseInt(a.point);
@@ -95,16 +105,38 @@ export const DynamicForm = ({ groupState }: DynamicFormProps) => {
       <div className="create-party">
         <form className="form" id="form__create-party">
           <div className="form__default-fields">
-            <TextField
-              label="Назва гри"
-              type="text"
-              name="game"
-              size="small"
-              value={gameName}
-              onChange={(e) => {
-                setGameName(e.target.value);
-              }}
-            />
+            <div className="select__container">
+              <FormControl fullWidth size="small">
+                <InputLabel id="demo-simple-select-label">Назва гри</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  name="name"
+                  value={gameName}
+                  size="small"
+                  label="Назва гри"
+                  onChange={(e) => {
+                    setGameName(e.target.value);
+                  }}
+                >
+                  {groupState.gamesList!.map((game, optionIndex) => {
+                    return (
+                      <MenuItem key={optionIndex} value={game.title}>
+                        <div className="select-item">
+                          <img
+                            className="select-item__img"
+                            src={game.image.length ? game.image : IconGames}
+                            alt="game icon"
+                          />
+                          {game.title.slice(0, 20)}
+                        </div>
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            </div>
+
             <TextField
               label="Тривалість гри, хв"
               type="number"

@@ -33,7 +33,8 @@ export const GamesChartDiagram = ({ groupState }: GamesChartDiagramProps) => {
           data: {
             labels: labels.map((label, index) => {
               const percentage = ((data[index] / totalParties) * 100).toFixed(1); // Розрахунок відсотків
-              return `${label} (${percentage}%)`; // Додаємо кількість партій у відсотках до лейблів
+              const totalPlayGame = data[index];
+              return `${label.slice(0, 20)} (${totalPlayGame}), ${percentage}%`; // Додаємо кількість партій у відсотках до лейблів
             }),
             datasets: [
               {
@@ -82,6 +83,7 @@ export const GamesChartDiagram = ({ groupState }: GamesChartDiagramProps) => {
   }, [groupState.parties]);
   return (
     <div className="games-diagram">
+      <h5>Зіграно ігр</h5>
       <canvas ref={canvasRef} id="myChart" />
     </div>
   );

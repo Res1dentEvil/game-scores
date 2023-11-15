@@ -20,7 +20,6 @@ interface DynamicFormProps {
 }
 
 export const DynamicFormDuel = ({ groupState }: DynamicFormProps) => {
-  // const [groupState, setGroupState] = useState({} as IGroup);
   const [groupMembers, setGroupMembers] = useState<IGroupMember[]>([]);
   const [members, setMembers] = useState<Field[]>([
     { name: '', point: '' },
@@ -61,6 +60,11 @@ export const DynamicFormDuel = ({ groupState }: DynamicFormProps) => {
       return;
     }
 
+    if (validMembers[0].name === validMembers[1].name) {
+      setError(true);
+      return;
+    }
+
     const newParty = {
       date: gameDate,
       gameName: gameName,
@@ -84,16 +88,6 @@ export const DynamicFormDuel = ({ groupState }: DynamicFormProps) => {
       <div className="create-party">
         <form className="form" id="form__create-party">
           <div className="form__default-fields">
-            {/*<TextField*/}
-            {/*  label="Назва гри"*/}
-            {/*  type="text"*/}
-            {/*  name="game"*/}
-            {/*  size="small"*/}
-            {/*  value={gameName}*/}
-            {/*  onChange={(e) => {*/}
-            {/*    setGameName(e.target.value);*/}
-            {/*  }}*/}
-            {/*/>*/}
             <div className="select__container">
               <FormControl fullWidth size="small">
                 <InputLabel id="demo-simple-select-label">Назва гри</InputLabel>

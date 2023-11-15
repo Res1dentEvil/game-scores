@@ -2,7 +2,9 @@ import React from 'react';
 import './PartiesTable.scss';
 import { IGroup } from '../../types';
 import { formattingDate } from '../../helpers/formatingDate';
-import Cup from '../../assets/img/wincup.png';
+import Medal from '../../assets/img/medal.svg';
+import MedalSilver from '../../assets/img/medal-silver.svg';
+import MedalMid from '../../assets/img/medal-mid.svg';
 import Cup1 from '../../assets/img/cup1.svg';
 
 interface PartiesTableProps {
@@ -48,18 +50,13 @@ export const PartiesTable = ({ groupState }: PartiesTableProps) => {
                     .map((winner, i) => {
                       return (
                         <div className="winner" key={`winner${i}`}>
-                          <div
-                            className="winner-place"
-                            style={
-                              i === 0
-                                ? { background: '#DAA520' }
-                                : i === 1
-                                ? { background: '#C0C0C0' }
-                                : { background: '#BA7739' }
-                            }
-                          >
-                            {i + 1}
-                          </div>
+                          {i === 0 ? (
+                            <img src={Medal} alt="medal-gold" width="13px" />
+                          ) : i === 1 ? (
+                            <img src={MedalSilver} alt="medal-silver" width="13px" />
+                          ) : (
+                            <img src={MedalMid} alt="medal-mid" width="13px" />
+                          )}
                           {winner.name}
                         </div>
                       );

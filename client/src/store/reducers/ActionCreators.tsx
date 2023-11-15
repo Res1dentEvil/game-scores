@@ -177,7 +177,7 @@ export const getGroup =
           },
         })
         .then((response) => {
-          console.log(response.data.followers);
+          // console.log(response.data.followers);
           setGroupState(response.data);
           dispatch(storeSlice.actions.fetchingEnd());
         });

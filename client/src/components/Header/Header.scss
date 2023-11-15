@@ -5,21 +5,24 @@
   height: 6vh;
   border-bottom: 1px solid #E4E4E4;
   width: 100%;
+  position: relative;
 
   .nav {
-    //border: 1px solid #00ff48;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     padding: 0 20px;
     width: 100%;
 
+
     .nav__links {
       display: flex;
       flex-direction: row;
       align-items: center;
       gap: 30px;
-
+      @media screen and (max-width: 600px) {
+        display: none;
+      }
     }
 
     .nav__link {
@@ -32,4 +35,88 @@
       }
     }
   }
+
+
+  .hamburger {
+    display: none;
+    position: absolute;
+    left: calc(100% - 60px);
+    z-index: 10;
+    @media screen and (max-width: 600px) {
+      display: block;
+    }
+  }
+
+  .hamburger .line {
+    width: 30px;
+    height: 3px;
+    background-color: gray;
+    display: block;
+    margin: 5px auto;
+    -webkit-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .is-active {
+    background-color: white;
+  }
+
+  .hamburger:hover {
+    cursor: pointer;
+  }
+
+  #hamburger-10 {
+    -webkit-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .is-open {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 20px;
+    width: 100%;
+    position: relative;
+    z-index: 9;
+
+
+    .nav__links {
+      animation-name: example;
+      animation-duration: 0.4s;
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      width: 50%;
+      height: 50vh;
+      background: #1A2B25;
+      color: white;
+    }
+
+    @keyframes example {
+      from {
+        left: 100%;
+      }
+      to {
+        left: 50%;
+      }
+    }
+
+    .nav__link {
+      color: white;
+      font-size: 18px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
 }
+

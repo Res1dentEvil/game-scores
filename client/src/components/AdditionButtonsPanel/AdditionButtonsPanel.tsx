@@ -14,7 +14,7 @@ export const AdditionButtonsPanel = ({
   if (!isAdmin) {
     return (
       <div className="group-page__row">
-        <h5>Тут ще нічого немає</h5>
+        <h5></h5>
       </div>
     );
   }

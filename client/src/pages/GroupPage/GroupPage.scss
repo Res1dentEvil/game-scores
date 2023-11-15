@@ -5,6 +5,7 @@
   justify-content: flex-start;
   gap: 20px;
 
+
   .group-page__container {
     width: 100%;
     display: flex;
@@ -15,13 +16,13 @@
   }
 
   .group-page__row {
-    //border: 1px solid rgba(104, 104, 104, 0.26);
     display: flex;
     flex-direction: row;
     justify-content: center;
     flex-wrap: wrap;
     gap: 20px;
     width: 100%;
+
 
     .group-page__row-btn-group {
       display: flex;
@@ -33,11 +34,25 @@
 
     button {
       min-width: 90px;
+      @media screen and (max-width: 600px) {
+        width: 190px;
+        height: 60px;
+      }
+    }
+  }
+
+  .group-page__row-winners {
+    @media screen and (max-width: 1300px) {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
   }
 
   h2 {
     margin: 0 auto;
+    font-family: 'Playfair Display', sans-serif;
+    font-weight: normal;
   }
 
   .group-page__dashboard-item {
@@ -62,16 +77,43 @@
     .dashboard-item__win-rate {
       font-size: 23px;
       font-weight: bold;
+      color: #CCA352;
+    }
+
+    @media screen and (max-width: 600px) {
+      width: 380px;
     }
   }
+
   .winner-dashboard-item {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
+    @media screen and (max-width: 600px) {
+      h3 {
+        text-align: right;
+        font-size: 15px;
+      }
+    }
   }
+
+  .reverse {
+    flex-direction: row-reverse;
+    .item-reverse {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+  }
+
   .diagram-dashboard-item {
 
+  }
+
+  .parties-table-item {
+    height: 330px;
+    overflow-y: scroll;
   }
 
 }

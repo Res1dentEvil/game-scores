@@ -14,24 +14,24 @@ import BasicModal from '../../components/UI/BasicModal/BasicModal';
 import Preloader from '../../components/UI/Preloader/Preloader';
 import { PartiesTable } from '../../components/PartiesTable/PartiesTable';
 import { MembersTable } from '../../components/MembersTable/MembersTable';
-import { tableData } from '../../helpers/getMemberTableData';
+import { MemberData, tableData } from '../../helpers/getMemberTableData';
 import { getAvatar } from '../../helpers/getAvatar';
 import Player from '../../assets/img/players4.svg';
 import Cup from '../../assets/img/wincup.png';
 import { GamesChartDiagram } from '../../components/GamesChart/GamesChartDiagram';
 import { AdditionButtonsPanel } from '../../components/AdditionButtonsPanel/AdditionButtonsPanel';
 import { storeSlice } from '../../store/reducers/StoreSlice';
-
-interface MemberData {
-  playedGamesNames: string[];
-  gamesWon: string[];
-  points: number;
-  winRate: number;
-}
+import { HighestAverageScoreWinner } from '../../components/WinnerDashboard/HighestAverageScoreWinner';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import IconGames from '../../assets/img/games.svg';
 
 export const GroupPage = () => {
   const [groupState, setGroupState] = useState({} as IGroup);
-  const [sortedData, setSortedData] = useState<Record<string, MemberData>>({});
+  const [sortedMembersByWinRate, setSortedMembersByWinRate] = useState<Record<string, MemberData>>(
+    {}
+  );
+  const [sortedMembersByScore, setSortedMembersByScore] = useState<Record<string, MemberData>>({});
+
   const [isAdmin, setIsAdmin] = useState(false);
 
   const [openModalMembers, setOpenModalMembers] = React.useState(false);
@@ -68,7 +68,7 @@ export const GroupPage = () => {
 
   useEffect(() => {
     if (groupState.gamesList) {
-      tableData(groupState, setSortedData);
+      tableData(groupState, setSortedMembersByWinRate, setSortedMembersByScore);
     }
     if (groupState.administrators) {
       setIsAdmin(
@@ -80,12 +80,12 @@ export const GroupPage = () => {
           .includes(currentUser.userName)
       );
     }
-  }, [groupState.gamesList]);
+  }, [groupState.gamesList, currentUser]);
 
   return (
     <div className="container group-page">
       {groupState.groupName && <h2>{groupState.groupName}</h2>}
-      {!groupState.followers || !Object.keys(sortedData)[0] ? (
+      {!groupState.followers || !Object.keys(sortedMembersByWinRate)[0] ? (
         <AdditionButtonsPanel
           handleOpenModalMembers={handleOpenModalMembers}
           handleOpenModalGame={handleOpenModalGame}
@@ -133,31 +133,26 @@ export const GroupPage = () => {
             </div>
           )}
 
-          <div className="group-page__row">
-            <div className="group-page__row-btn-group">
-              <button>All times</button>
-              <button>2021</button>
-              <button>2022</button>
-              <button>2023</button>
-            </div>
-          </div>
-          <div className="group-page__row">
-            <div className="group-page__dashboard-item winner-dashboard-item">
-              <div>
+          <div className="group-page__row group-page__row-winners">
+            <div className="group-page__dashboard-item winner-dashboard-item reverse">
+              <div className="item-reverse">
                 <img
                   src={
-                    getAvatar(Object.keys(sortedData)[0], groupState).length
-                      ? getAvatar(Object.keys(sortedData)[0], groupState)
+                    getAvatar(Object.keys(sortedMembersByWinRate)[0], groupState).length
+                      ? getAvatar(Object.keys(sortedMembersByWinRate)[0], groupState)
                       : Player
                   }
                   alt=""
                   className="member-avatar"
                   width={'60px'}
                 ></img>
-                <h3>Вітаємо, {Object.keys(sortedData)[0]}!</h3>
+                <h3>Вітаємо, {Object.keys(sortedMembersByWinRate)[0]}!</h3>
                 <div className="dashboard-item__winner-description">Найвищий показник перемог</div>
                 <div className="dashboard-item__win-rate">
-                  {sortedData[Object.keys(sortedData)[0]].winRate.toFixed(1)}%
+                  {sortedMembersByWinRate[Object.keys(sortedMembersByWinRate)[0]].winRate.toFixed(
+                    1
+                  )}
+                  %
                 </div>
               </div>
 
@@ -169,7 +164,10 @@ export const GroupPage = () => {
                 <GamesChartDiagram groupState={groupState} />
               </div>
             ) : (
-              <div className="group-page__dashboard-item">win point rate</div>
+              <HighestAverageScoreWinner
+                groupState={groupState}
+                sortedData={sortedMembersByScore}
+              />
             )}
           </div>
           {groupState.groupMode === 'Mass PvP' && (
@@ -182,23 +180,23 @@ export const GroupPage = () => {
 
           <div className="group-page__row">
             <div className="group-page__dashboard-item">
-              <MembersTable sortedData={sortedData} groupState={groupState} />
+              <MembersTable sortedData={sortedMembersByWinRate} groupState={groupState} />
             </div>
           </div>
           <div className="group-page__row">
-            <div className="group-page__dashboard-item">
+            <div className="group-page__dashboard-item parties-table-item">
               <PartiesTable groupState={groupState} />
             </div>
           </div>
 
-          <button
-            onClick={async () => {
-              await dispatch(deleteGroup(id!, currentUser));
-              navigate('/profile');
-            }}
-          >
-            delete group
-          </button>
+          {/*<button*/}
+          {/*  onClick={async () => {*/}
+          {/*    await dispatch(deleteGroup(id!, currentUser));*/}
+          {/*    navigate('/profile');*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  delete group*/}
+          {/*</button>*/}
         </div>
       )}
       <BasicModal

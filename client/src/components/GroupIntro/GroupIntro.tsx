@@ -14,9 +14,17 @@ interface GroupIntroProps {
 export const GroupIntro = ({ group }: GroupIntroProps) => {
   const navigate = useNavigate();
 
+  const totalTime = () => {
+    let time = 0;
+    group.parties.forEach((party) => {
+      time += parseInt(party.duration);
+    });
+    return (time / 60).toFixed(0);
+  };
+
   return (
     <div
-      className="group-intro"
+      className={`group-intro ${group.groupMode === 'Duel' && 'group-intro-duel'}`}
       onClick={() => {
         navigate(`/group/${group._id}`);
       }}
@@ -26,11 +34,11 @@ export const GroupIntro = ({ group }: GroupIntroProps) => {
         <div className="group-intro__item item__game-mode">
           {group.groupMode === 'Duel' ? (
             <div className="duel">
-              <img src={IconBorder} alt="" title="Duel mode" />
+              <img src={IconBorder} alt="" title="Тип групи 'Duel'" />
             </div>
           ) : (
             <div className="mPvP">
-              <img src={IconBorder} alt="" title="mPvP mode" />
+              <img src={IconBorder} alt="" title="Тип групи 'mPvP'" />
             </div>
           )}
         </div>
@@ -42,8 +50,8 @@ export const GroupIntro = ({ group }: GroupIntroProps) => {
           <span>{group.members.length}</span>
           <img className="" src={IconMPlayers} alt="" width="70" height="70" />
         </div>
-        <div className="group-intro__item item__time" title="Зіграно часу">
-          <span>0</span>
+        <div className="group-intro__item item__time" title="Зіграно годин">
+          <span>{totalTime()}</span>
           <img className="" src={IconTime} alt="" width="70" height="70" />
         </div>
       </div>

@@ -2,16 +2,18 @@ import { IGroup } from '../types';
 import { storeSlice } from '../store/reducers/StoreSlice';
 import { useAppDispatch } from '../hooks/redux';
 
-interface MemberData {
+export interface MemberData {
   playedGamesNames: string[];
   gamesWon: string[];
   points: number;
+  averagePoint: number;
   winRate: number;
 }
 
 export const tableData = (
   groupState: IGroup,
-  setSortedData: React.Dispatch<React.SetStateAction<Record<string, MemberData>>>
+  setSortedMembersByWinRate: React.Dispatch<React.SetStateAction<Record<string, MemberData>>>,
+  setSortedMembersByScore: React.Dispatch<React.SetStateAction<Record<string, MemberData>>>
 ) => {
   const members = groupState.members.map((member) => member.memberName);
   const data: Record<string, MemberData> = {};
@@ -21,6 +23,7 @@ export const tableData = (
       playedGamesNames: [],
       gamesWon: [],
       points: 0,
+      averagePoint: 0,
       winRate: 0,
     };
   }
@@ -49,7 +52,14 @@ export const tableData = (
       (data[member].gamesWon.length / data[member].playedGamesNames.length) * 100;
   }
 
-  setSortedData(
+  setSortedMembersByWinRate(
     Object.fromEntries(Object.entries(data).sort(([, a], [, b]) => b.winRate - a.winRate))
+  );
+
+  for (const member in data) {
+    data[member].averagePoint = data[member].points / data[member].playedGamesNames.length;
+  }
+  setSortedMembersByScore(
+    Object.fromEntries(Object.entries(data).sort(([, a], [, b]) => b.averagePoint - a.averagePoint))
   );
 };
