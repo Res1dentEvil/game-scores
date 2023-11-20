@@ -31,7 +31,6 @@ export const GroupPage = () => {
     {}
   );
   const [sortedMembersByScore, setSortedMembersByScore] = useState<Record<string, MemberData>>({});
-
   const [isAdmin, setIsAdmin] = useState(false);
 
   const [openModalMembers, setOpenModalMembers] = React.useState(false);

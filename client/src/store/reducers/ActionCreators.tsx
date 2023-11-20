@@ -13,8 +13,8 @@ import { storeSlice } from './StoreSlice';
 import React, { Dispatch, SetStateAction } from 'react';
 import { googleLogout } from '@react-oauth/google';
 
-export const baseURL = `http://localhost:5000`;
-// const baseURL = `https://app-invoices-server-res1dentevil.onrender.com`;
+// export const baseURL = `http://localhost:5000`;
+const baseURL = `https://game-board.onrender.com`;
 
 export const getGoogleProfile =
   (userGoogleAuthData: IUserGoogleAuthData) => async (dispatch: AppDispatch) => {

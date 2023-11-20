@@ -11,11 +11,11 @@ import App from './components/App/App';
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 export const store = setupStore();
 root.render(
-  <BrowserRouter>
+  <HashRouter>
     <Provider store={store}>
       <GoogleOAuthProvider clientId="107840811352-p9utehcv8k4vg740euputu8je9rqeag4.apps.googleusercontent.com">
         <App />
       </GoogleOAuthProvider>
     </Provider>
-  </BrowserRouter>
+  </HashRouter>
 );

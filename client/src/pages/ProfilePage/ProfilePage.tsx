@@ -34,7 +34,7 @@ const ProfilePage = () => {
 
           {/*<img className="profile-page__img" src={userGoogleProfile.picture} alt="profile-img" />*/}
           <h2 className="profile-page__h2">{userGoogleProfile.name}</h2>
-          <div>
+          <div className="profile-page__group-list-wrapper">
             {loadingProfile ? (
               <></>
             ) : (
